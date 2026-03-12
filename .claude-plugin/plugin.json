@@ -1,0 +1,10 @@
+{
+  "name": "claudomate",
+  "description": "Automation discovery and deployment agent. Observes your workflows, proposes automation candidates, and deploys self-contained agents to execute them on schedule.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Sid McFarland"
+  },
+  "license": "MIT",
+  "keywords": ["automation", "workflows", "scheduling", "agents"]
+}

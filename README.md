@@ -17,14 +17,22 @@ Over time, claudomate builds a growing ecosystem of purpose-built agents that ha
 
 ### Step 1: Install the plugin
 
+**From the official Claude Code marketplace (coming soon):**
+
+Claudomate is still under development and will be submitted to the official marketplace once stable.
+
+```
+/plugin install claudomate@claude-plugins-official
+```
+
 **From GitHub:**
 
-```bash
+```
 /plugin marketplace add sidmcfarland/claudomate
 /plugin install claudomate@sidmcfarland
 ```
 
-**Or for local development:**
+**For local development:**
 
 ```bash
 git clone https://github.com/sidmcfarland/claudomate.git

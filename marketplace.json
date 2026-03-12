@@ -1,6 +1,6 @@
 {
-  "name": "claudomate",
-  "description": "Marketplace for the Claudomate plugin — automation discovery and deployment agent.",
+  "name": "sidmcfarland",
+  "description": "Plugins by Sid McFarland.",
   "plugins": [
     {
       "name": "claudomate",

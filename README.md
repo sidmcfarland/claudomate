@@ -21,10 +21,6 @@ Over time, claudomate builds a growing ecosystem of purpose-built agents that ha
 
 Claudomate is still under development and will be submitted to the official marketplace once stable.
 
-```
-/plugin install claudomate@claude-plugins-official
-```
-
 **From GitHub:**
 
 ```

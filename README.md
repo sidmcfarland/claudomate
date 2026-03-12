@@ -20,7 +20,7 @@ Over time, claudomate builds a growing ecosystem of purpose-built agents that ha
 | `/claudomate:start` | Add the session-start hook to CLAUDE.md (creates the file if needed) |
 | `/claudomate:scan` | Check for pending proposals and agent health alerts |
 | `/claudomate:build` | Interactively model a workflow for automation |
-| `/claudomate:stop` | Remove the session-start hook from CLAUDE.md (pauses claudomate, leaves agents intact) |
+| `/claudomate:stop` | Pause claudomate: remove the session-start hook and suspend all agent cron schedules |
 | `/claudomate:kill` | Remove a specific deployed agent (cron entry + directory + registry) |
 | `/claudomate:remove` | Full uninstall: stop + kill all agents + delete working files |
 
@@ -76,8 +76,9 @@ and registry entry without affecting anything else.
 
 ### To pause without uninstalling
 
-Run `/claudomate:stop` to remove the session-start hook while leaving all
-deployed agents and working files intact. Run `/claudomate:start` to reactivate.
+Run `/claudomate:stop` to remove the session-start hook and suspend all agent
+cron schedules. All files and working data are preserved. Run `/claudomate:start`
+to fully resume — it restores the hook and re-enables all suspended cron jobs.
 
 ## Usage
 
@@ -133,8 +134,12 @@ Claudomate periodically reviews deployed agent logs for failures, information ga
 | Component | Purpose |
 |---|---|
 | `agents/claudomate.md` | The core subagent definition with all four operating modes |
+| `skills/start/` | Adds the session-start hook to CLAUDE.md and restores suspended cron schedules |
 | `skills/scan/` | Session-start skill that reads proposals and monitoring logs |
-| `skills/build/` | Skill that invokes claudomate for interactive workflow modeling |
+| `skills/build/` | Invokes the claudomate subagent for interactive workflow modeling |
+| `skills/stop/` | Removes the session-start hook and suspends all agent cron schedules |
+| `skills/kill/` | Removes a single deployed agent (cron entry + directory + registry) |
+| `skills/remove/` | Full uninstall: stop + kill all agents + delete working files |
 
 ### File locations
 

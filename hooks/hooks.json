@@ -1,12 +1,14 @@
 {
-  "SessionStart": [
-    {
-      "hooks": [
-        {
-          "type": "command",
-          "command": "bash -c 'if [ -f \"$PWD/.claude/claudomate/config.json\" ]; then WDIR=\"$PWD/.claude/claudomate\"; else WDIR=\"$HOME/.claude/claudomate\"; fi; C=\"$WDIR/config.json\"; [ -f \"$C\" ] && grep -q '\\''\"enabled\"[[:space:]]*:[[:space:]]*false'\\'' \"$C\" && exit 0; P=\"$WDIR/proposals.json\"; M=\"$WDIR/monitoring-report.json\"; hp=false; ha=false; [ -f \"$P\" ] && grep '\\''\"status\"'\\'' \"$P\" | grep -q '\\''\"pending\"'\\'' && hp=true; [ -f \"$M\" ] && grep -qE '\\''\"(critical|warning)\"'\\'' \"$M\" && ha=true; [ \"$hp\" = false ] && [ \"$ha\" = false ] && exit 0; echo \"[Claudomate] There are items requiring your attention.\"; echo \"\"; if [ \"$hp\" = true ]; then echo \"Pending workflow proposals:\"; grep -o '\\''\"workflow\"[[:space:]]*:[[:space:]]*\"[^\"]*\"'\\'' \"$P\" | sed '\\''s/.*\"workflow\"[[:space:]]*:[[:space:]]*\"\\([^\"]*\\)\"/  - \\1/'\\'' ; echo \"\"; fi; if [ \"$ha\" = true ]; then echo \"Monitoring alerts detected in deployed agents.\"; echo \"\"; fi; echo \"Run /claudomate:scan to surface these to the user before proceeding.\"'"
-        }
-      ]
-    }
-  ]
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'if [ -f \"$PWD/.claude/claudomate/config.json\" ]; then WDIR=\"$PWD/.claude/claudomate\"; else WDIR=\"$HOME/.claude/claudomate\"; fi; C=\"$WDIR/config.json\"; [ -f \"$C\" ] && grep -q '\\''\"enabled\"[[:space:]]*:[[:space:]]*false'\\'' \"$C\" && exit 0; P=\"$WDIR/proposals.json\"; M=\"$WDIR/monitoring-report.json\"; hp=false; ha=false; [ -f \"$P\" ] && grep '\\''\"status\"'\\'' \"$P\" | grep -q '\\''\"pending\"'\\'' && hp=true; [ -f \"$M\" ] && grep -qE '\\''\"(critical|warning)\"'\\'' \"$M\" && ha=true; [ \"$hp\" = false ] && [ \"$ha\" = false ] && exit 0; echo \"[Claudomate] There are items requiring your attention.\"; echo \"\"; if [ \"$hp\" = true ]; then echo \"Pending workflow proposals:\"; grep -o '\\''\"workflow\"[[:space:]]*:[[:space:]]*\"[^\"]*\"'\\'' \"$P\" | sed '\\''s/.*\"workflow\"[[:space:]]*:[[:space:]]*\"\\([^\"]*\\)\"/  - \\1/'\\'' ; echo \"\"; fi; if [ \"$ha\" = true ]; then echo \"Monitoring alerts detected in deployed agents.\"; echo \"\"; fi; echo \"Run /claudomate:scan to surface these to the user before proceeding.\"'"
+          }
+        ]
+      }
+    ]
+  }
 }

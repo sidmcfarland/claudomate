@@ -1,0 +1,14 @@
+{
+  "name": "claudomate",
+  "description": "Marketplace for the Claudomate plugin — automation discovery and deployment agent.",
+  "plugins": [
+    {
+      "name": "claudomate",
+      "description": "Automation discovery and deployment agent. Observes your workflows, proposes automation candidates, and deploys self-contained agents to execute them on schedule.",
+      "source": ".",
+      "version": "1.0.0",
+      "keywords": ["automation", "workflows", "scheduling", "agents"],
+      "author": "Sid McFarland"
+    }
+  ]
+}

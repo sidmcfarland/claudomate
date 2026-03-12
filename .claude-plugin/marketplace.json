@@ -1,14 +1,22 @@
 {
   "name": "sidmcfarland",
   "description": "Plugins by Sid McFarland.",
+  "owner": {
+    "name": "Sid McFarland"
+  },
   "plugins": [
     {
       "name": "claudomate",
       "description": "Automation discovery and deployment agent. Observes your workflows, proposes automation candidates, and deploys self-contained agents to execute them on schedule.",
-      "source": ".",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/sidmcfarland/claudomate.git"
+      },
       "version": "1.0.0",
       "keywords": ["automation", "workflows", "scheduling", "agents"],
-      "author": "Sid McFarland"
+      "author": {
+        "name": "Sid McFarland"
+      }
     }
   ]
 }

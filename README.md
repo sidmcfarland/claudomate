@@ -13,6 +13,19 @@ Claudomate is a subagent that progressively automates your routine tasks. It wor
 
 Over time, claudomate builds a growing ecosystem of purpose-built agents that handle your routine work so you can focus on tasks that genuinely require your judgment.
 
+## Skills
+
+| Skill | Purpose |
+|---|---|
+| `/claudomate:start` | Add the session-start hook to CLAUDE.md (creates the file if needed) |
+| `/claudomate:scan` | Check for pending proposals and agent health alerts |
+| `/claudomate:build` | Interactively model a workflow for automation |
+| `/claudomate:stop` | Remove the session-start hook from CLAUDE.md (pauses claudomate, leaves agents intact) |
+| `/claudomate:kill` | Remove a specific deployed agent (cron entry + directory + registry) |
+| `/claudomate:remove` | Full uninstall: stop + kill all agents + delete working files |
+
+> **Note:** Plugin skills don't appear in slash command autocomplete. Type the full command — it will work even though nothing shows up as you type.
+
 ## Installation
 
 ### Step 1: Install the plugin
@@ -35,60 +48,36 @@ git clone https://github.com/sidmcfarland/claudomate.git
 claude --plugin-dir ./claudomate
 ```
 
-### Step 2: Add the session-start check to your CLAUDE.md
+### Step 2: Run `/claudomate:start`
 
-This step is required. Without it, claudomate has no way to surface proposals
-and monitoring alerts to you at the start of each session.
-
-Open your project's `CLAUDE.md` file (or `~/.claude/CLAUDE.md` if you want this
-active across all projects). Add the following line:
-
-```
-At the start of each new session or conversation, run the `/claudomate:scan` skill.
-```
-
-If the file does not exist, create it with that line as its contents.
-
-This tells your main agent to check for pending automation proposals and deployed
-agent health alerts whenever you start a new session or conversation.
+This activates claudomate by adding a session-start hook to your CLAUDE.md. It
+will ask whether to activate for this project only or globally across all projects,
+then create or update the file automatically.
 
 ## Uninstallation
 
-### Step 1: Remove the session-start check from your CLAUDE.md
+### To fully uninstall
 
-Open the `CLAUDE.md` file where you added the line during installation and remove:
+Run `/claudomate:remove`. This will:
+- Remove the session-start hook from CLAUDE.md
+- Kill all deployed agents (cron entries + directories)
+- Delete all claudomate working files
+
+Then uninstall the plugin itself:
 
 ```
-At the start of each new session or conversation, run the `/claudomate:scan` skill.
-```
-
-### Step 2: Uninstall the plugin
-
-```bash
 /plugin uninstall claudomate@sidmcfarland
 ```
 
-### Step 3 (optional): Remove claudomate working files
+### To retire a single agent
 
-Claudomate stores proposals, workflow models, and monitoring data at
-`~/.claude/claudomate/`. If you no longer need this data:
+Run `/claudomate:kill` to remove one deployed agent's cron entry, directory,
+and registry entry without affecting anything else.
 
-```bash
-rm -rf ~/.claude/claudomate/
-```
+### To pause without uninstalling
 
-### Step 4 (optional): Remove deployed agents
-
-Any agents claudomate deployed are standalone projects in their own
-directories (default: `~/agents/{agent-name}/`). Each also has a system cron
-entry. To fully remove a deployed agent:
-
-1. Remove its cron entry: `crontab -e` and delete the relevant line
-2. Delete its project directory: `rm -rf ~/agents/{agent-name}/`
-
-Repeat for each deployed agent. You can find the full list of deployed agents
-in `~/.claude/claudomate/monitoring.json` (if it still exists) or by checking
-your crontab.
+Run `/claudomate:stop` to remove the session-start hook while leaving all
+deployed agents and working files intact. Run `/claudomate:start` to reactivate.
 
 ## Usage
 
@@ -104,7 +93,7 @@ It reads your agent's memory for patterns — things you do repeatedly, on a sch
 
 ### Reviewing proposals
 
-At the start of each session (if you added the CLAUDE.md line), your agent checks for pending proposals and summarizes them. You can also check manually:
+At the start of each session (if you ran `/claudomate:start`), your agent checks for pending proposals and summarizes them. You can also check manually:
 
 ```
 /claudomate:scan

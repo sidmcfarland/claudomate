@@ -17,13 +17,14 @@ Over time, claudomate builds a growing ecosystem of purpose-built agents that ha
 
 ### Step 1: Install the plugin
 
-**From a marketplace:**
+**From GitHub:**
 
 ```bash
-claude plugin install claudomate
+/plugin marketplace add sidmcfarland/claudomate
+/plugin install claudomate@sidmcfarland
 ```
 
-**Or for local testing:**
+**Or for local development:**
 
 ```bash
 git clone https://github.com/sidmcfarland/claudomate.git
@@ -60,7 +61,7 @@ At the start of each new session or conversation, run the `/claudomate:check-cla
 ### Step 2: Uninstall the plugin
 
 ```bash
-claude plugin uninstall claudomate
+/plugin uninstall claudomate@sidmcfarland
 ```
 
 ### Step 3 (optional): Remove claudomate working files

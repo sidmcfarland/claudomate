@@ -1,5 +1,5 @@
 ---
-name: check-claudomate
+name: scan
 description: >
   Checks the claudomate agent's proposals log and monitoring reports for anything
   that warrants the user's attention. Run at the start of each session.
@@ -20,7 +20,7 @@ Check the claudomate agent's logs for anything that needs the user's attention.
    - Whether it requires user action
 
 3. If there are pending proposals, ask the user if they'd like to explore
-   automating any of them. If the user agrees, run the `/claudomate:interrogate`
+   automating any of them. If the user agrees, run the `/claudomate:build`
    skill to begin the workflow modeling process.
 
 4. If there are critical monitoring findings, surface them and recommend next steps.

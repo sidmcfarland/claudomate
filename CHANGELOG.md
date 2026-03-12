@@ -9,6 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 - Claudomate subagent with four operating modes: observation, interrogation, deployment, and monitoring
-- `/claudomate:check-claudomate` skill for session-start proposal and monitoring checks
-- `/claudomate:interrogate` skill for interactive workflow modeling
+- `/claudomate:scan` skill for session-start proposal and monitoring checks
+- `/claudomate:build` skill for interactive workflow modeling
 - Plugin manifest and structure for Claude Code marketplace distribution

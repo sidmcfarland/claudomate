@@ -44,7 +44,7 @@ Open your project's `CLAUDE.md` file (or `~/.claude/CLAUDE.md` if you want this
 active across all projects). Add the following line:
 
 ```
-At the start of each new session or conversation, run the `/claudomate:check-claudomate` skill.
+At the start of each new session or conversation, run the `/claudomate:scan` skill.
 ```
 
 If the file does not exist, create it with that line as its contents.
@@ -59,7 +59,7 @@ agent health alerts whenever you start a new session or conversation.
 Open the `CLAUDE.md` file where you added the line during installation and remove:
 
 ```
-At the start of each new session or conversation, run the `/claudomate:check-claudomate` skill.
+At the start of each new session or conversation, run the `/claudomate:scan` skill.
 ```
 
 ### Step 2: Uninstall the plugin
@@ -107,7 +107,7 @@ It reads your agent's memory for patterns — things you do repeatedly, on a sch
 At the start of each session (if you added the CLAUDE.md line), your agent checks for pending proposals and summarizes them. You can also check manually:
 
 ```
-/claudomate:check-claudomate
+/claudomate:scan
 ```
 
 ### Modeling a workflow
@@ -115,7 +115,7 @@ At the start of each session (if you added the CLAUDE.md line), your agent check
 When you approve a proposal, start the interactive modeling process:
 
 ```
-/claudomate:interrogate
+/claudomate:build
 ```
 
 Claudomate asks you targeted questions to fully specify the workflow — triggers, steps, tools, success criteria, error handling, and schedule. This may span multiple sessions; progress is saved automatically.
@@ -144,8 +144,8 @@ Claudomate periodically reviews deployed agent logs for failures, information ga
 | Component | Purpose |
 |---|---|
 | `agents/claudomate.md` | The core subagent definition with all four operating modes |
-| `skills/check-claudomate/` | Session-start skill that reads proposals and monitoring logs |
-| `skills/interrogate/` | Skill that invokes claudomate for interactive workflow modeling |
+| `skills/scan/` | Session-start skill that reads proposals and monitoring logs |
+| `skills/build/` | Skill that invokes claudomate for interactive workflow modeling |
 
 ### File locations
 
@@ -172,15 +172,6 @@ The system separates concerns by execution mode:
 Deployed agents are standalone Claude Code projects, not subagents. Each has its own CLAUDE.md, skills, and configuration. This ensures they are portable, self-contained, and have no runtime dependency on your main agent.
 
 ## Customization
-
-### Renaming the plugin
-
-To use a different name:
-
-1. Update the `name` field in `.claude-plugin/plugin.json`
-2. Update the `name` field in `agents/claudomate.md` frontmatter
-3. Update references to `claudomate` in the skill files (the `/claudomate:` namespace prefix changes automatically to match the plugin name)
-4. Update the working directory path `~/.claude/claudomate/` in the agent prompt to `~/.claude/{your-name}/`
 
 ### Changing the default agent directory
 

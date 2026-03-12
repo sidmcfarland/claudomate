@@ -1,5 +1,5 @@
 ---
-name: interrogate
+name: build
 description: >
   Invokes the claudomate agent as a foreground subagent to interactively model
   a workflow with the user. Use when the user wants to explore automating a

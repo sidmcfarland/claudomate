@@ -8,6 +8,12 @@ description: >
 
 Fully uninstall claudomate from this machine.
 
+## Working Directory
+
+First, determine `CLAUDOMATE_DIR`:
+- If `.claude/claudomate/` exists in the current working directory → use that
+- Otherwise → use `~/.claude/claudomate/`
+
 ## Steps
 
 ### 1. Confirm intent
@@ -18,7 +24,7 @@ what will be removed and ask for explicit confirmation:
 ```
 This will permanently remove:
 - All deployed agents (cron entries + project directories)
-- All claudomate working files (~/.claude/claudomate/)
+- All claudomate working files ({CLAUDOMATE_DIR}/)
 
 Deployed agents and their history cannot be recovered after this.
 Continue? (yes/no)
@@ -28,7 +34,7 @@ If the user says no, stop immediately.
 
 ### 2. Remove all deployed agents
 
-Read `~/.claude/claudomate/monitoring.json` to get the list of deployed agents.
+Read `{CLAUDOMATE_DIR}/monitoring.json` to get the list of deployed agents.
 For each agent:
 
 a. Remove its cron entry: run `crontab -l`, filter out any line that references
@@ -44,10 +50,10 @@ If monitoring.json doesn't exist or has no agents, skip this step.
 ### 3. Remove claudomate working files
 
 Delete the entire claudomate working directory (this includes config.json,
-proposals, models, monitoring data, and logs):
+proposals, models, monitoring data, logs, and all agent directories):
 
 ```bash
-rm -rf ~/.claude/claudomate/
+rm -rf {CLAUDOMATE_DIR}/
 ```
 
 ### 4. Instruct the user to uninstall the plugin

@@ -20,9 +20,10 @@ Claudomate is a Claude Code plugin (not a standalone app — no package.json, no
 
 ## Key Architecture Decisions
 
-- **Deployed agents are standalone Claude Code projects**, not subagents. Each gets its own directory (`~/agents/{name}/`), CLAUDE.md, skills, settings.json, and cron entry. Zero runtime dependency on the main agent.
-- **All working state lives in `~/.claude/claudomate/`** — proposals.json, models/, monitoring.json, monitoring-report.json, and logs/. This is the subagent's working directory, not part of this repo.
-- **Session-start scanning is handled by a `SessionStart` hook** defined in `hooks/hooks.json`. The hook checks `~/.claude/claudomate/config.json` for `enabled: false` before running, and exits silently when there is nothing to report. No manual CLAUDE.md setup is required.
+- **Global vs. project mode**: Claudomate resolves its working directory at runtime. If `.claude/claudomate/` exists in the current working directory, it uses that (project mode); otherwise it falls back to `~/.claude/claudomate/` (global mode). `/claudomate:start` handles first-time setup and asks which mode to use if no config exists yet.
+- **Deployed agents live inside the working directory** at `{CLAUDOMATE_DIR}/agents/{name}/`. Global agents go to `~/.claude/claudomate/agents/`; project agents go to `.claude/claudomate/agents/`. Each is a standalone Claude Code project with its own CLAUDE.md, skills, settings.json, and cron entry. Zero runtime dependency on the main agent.
+- **All working state lives in `CLAUDOMATE_DIR`** — proposals.json, models/, agents/, monitoring.json, monitoring-report.json, and logs/. Not part of this repo.
+- **Session-start scanning is handled by a `SessionStart` hook** defined in `hooks/hooks.json`. The hook resolves `CLAUDOMATE_DIR` using the same local-first logic, checks `config.json` for `enabled: false`, and exits silently when there is nothing to report. No manual CLAUDE.md setup is required.
 
 ## Development
 

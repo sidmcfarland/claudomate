@@ -5,15 +5,21 @@ description: >
   that warrants the user's attention. Run at the start of each session.
 ---
 
+## Working Directory
+
+First, determine `CLAUDOMATE_DIR`:
+- If `.claude/claudomate/` exists in the current working directory → use that
+- Otherwise → use `~/.claude/claudomate/`
+
 Check the claudomate agent's logs for anything that needs the user's attention.
 
-1. Read `~/.claude/claudomate/proposals.json` if it exists. Look for entries with
+1. Read `{CLAUDOMATE_DIR}/proposals.json` if it exists. Look for entries with
    status "pending". For each pending proposal, briefly summarize:
    - The workflow name and description
    - The claudomate's confidence level
    - Known gaps that would need to be filled through interrogation
 
-2. Read `~/.claude/claudomate/monitoring-report.json` if it exists. Look for any
+2. Read `{CLAUDOMATE_DIR}/monitoring-report.json` if it exists. Look for any
    critical or warning findings from deployed agents. Summarize:
    - Which agent reported the issue
    - What the issue is

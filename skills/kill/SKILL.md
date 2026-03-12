@@ -8,9 +8,15 @@ description: >
 
 Remove a specific deployed agent managed by claudomate.
 
+## Working Directory
+
+First, determine `CLAUDOMATE_DIR`:
+- If `.claude/claudomate/` exists in the current working directory → use that
+- Otherwise → use `~/.claude/claudomate/`
+
 ## Steps
 
-1. Read `~/.claude/claudomate/monitoring.json`. This file contains the registry
+1. Read `{CLAUDOMATE_DIR}/monitoring.json`. This file contains the registry
    of deployed agents. If the file doesn't exist or is empty, tell the user
    there are no deployed agents to remove and stop.
 
@@ -33,10 +39,10 @@ Remove a specific deployed agent managed by claudomate.
    `crontab -`. Be careful not to remove unrelated cron entries.
 
 5. Delete the agent's project directory using `rm -rf {path}`. Double-check that
-   the path comes from monitoring.json and is inside a safe location (e.g. home
-   directory) before deleting.
+   the path comes from monitoring.json and is within the home directory before
+   deleting.
 
-6. Remove the agent's entry from `~/.claude/claudomate/monitoring.json` and save
+6. Remove the agent's entry from `{CLAUDOMATE_DIR}/monitoring.json` and save
    the updated file.
 
 7. Confirm to the user that the agent has been fully removed: cron entry deleted,

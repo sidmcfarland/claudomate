@@ -114,7 +114,7 @@ Claudomate asks you targeted questions to fully specify the workflow — trigger
 
 When a workflow is fully modeled and you approve it, claudomate creates:
 
-- A new project directory (default: `~/agents/{agent-name}/`)
+- A new agent directory at `{CLAUDOMATE_DIR}/agents/{agent-name}/`
 - A complete `CLAUDE.md` with all workflow instructions
 - Skills for discrete capabilities (e.g., reading emails, categorizing transactions)
 - MCP server configuration for external service access
@@ -144,13 +144,21 @@ Claudomate periodically reviews deployed agent logs for failures, information ga
 
 ### File locations
 
-Claudomate stores its working files at `~/.claude/claudomate/`:
+Claudomate supports two installation modes, resolved automatically at runtime:
+
+- **Global** (default): `~/.claude/claudomate/`
+- **Project**: `.claude/claudomate/` in the current working directory
+
+Run `/claudomate:start` on first use — it will ask which mode you want if no
+config file is found. From then on the mode is detected automatically.
 
 ```
-~/.claude/claudomate/
-├── config.json               # Plugin settings (enabled, future options)
+{CLAUDOMATE_DIR}/
+├── config.json               # Plugin settings (enabled, scope)
 ├── proposals.json            # Candidate workflows
 ├── models/                   # In-progress workflow models
+├── agents/                   # Deployed agent projects
+│   └── {agent-name}/
 ├── monitoring.json           # Deployed agent registry
 ├── monitoring-report.json    # Latest health report
 └── logs/
@@ -169,9 +177,9 @@ Deployed agents are standalone Claude Code projects, not subagents. Each has its
 
 ## Customization
 
-### Changing the default agent directory
+### Agent directories
 
-Deployed agents are created at `~/agents/{agent-name}/` by default. Claudomate asks for confirmation during deployment, so you can choose a different location per agent. To change the default, edit the deployment section in `agents/claudomate.md`.
+Deployed agents are created at `{CLAUDOMATE_DIR}/agents/{agent-name}/`, keeping everything self-contained within the claudomate working directory. To change the default, edit the deployment section in `agents/claudomate.md`.
 
 ## Requirements
 

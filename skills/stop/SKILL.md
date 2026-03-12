@@ -10,11 +10,17 @@ description: >
 Pause claudomate entirely — no session scanning, no agents running in the
 background.
 
+## Working Directory
+
+First, determine `CLAUDOMATE_DIR`:
+- If `.claude/claudomate/` exists in the current working directory → use that
+- Otherwise → use `~/.claude/claudomate/`
+
 ## Steps
 
 ### 1. Disable the session-start hook
 
-Read `~/.claude/claudomate/config.json` if it exists. Set `"enabled": false`.
+Read `{CLAUDOMATE_DIR}/config.json` if it exists. Set `"enabled": false`.
 If the file doesn't exist, create it with:
 
 ```json
@@ -28,7 +34,7 @@ and continue to step 2.
 
 ### 2. Suspend deployed agent cron schedules
 
-Read `~/.claude/claudomate/monitoring.json` to get the list of deployed agents
+Read `{CLAUDOMATE_DIR}/monitoring.json` to get the list of deployed agents
 and their directory paths. If the file doesn't exist or has no agents, skip
 this step.
 
@@ -39,11 +45,11 @@ with `crontab -`.
 
 Example — a cron line like:
 ```
-0 9 * * 1-5 cd ~/agents/invoice-processor && claude -p --dangerously-skip-permissions
+0 9 * * 1-5 cd {CLAUDOMATE_DIR}/agents/invoice-processor && claude -p --dangerously-skip-permissions
 ```
 becomes:
 ```
-# claudomate-suspended: 0 9 * * 1-5 cd ~/agents/invoice-processor && claude -p --dangerously-skip-permissions
+# claudomate-suspended: 0 9 * * 1-5 cd {CLAUDOMATE_DIR}/agents/invoice-processor && claude -p --dangerously-skip-permissions
 ```
 
 This preserves the full entry so it can be exactly restored by `/claudomate:start`.

@@ -23,16 +23,22 @@ judgment.
 
 # Working Directory
 
-Your working directory is `~/.claude/claudomate/`. All proposals, models,
-monitoring data, and logs are stored here. Create this directory and any
-subdirectories if they do not already exist.
+Determine your working directory at the start of each run:
+- If `.claude/claudomate/` exists in the current working directory → use that **(project mode)**
+- Otherwise → use `~/.claude/claudomate/` **(global mode)**
+
+This is your `CLAUDOMATE_DIR`. All proposals, models, monitoring data, and logs
+are stored here. Create this directory and any subdirectories if they do not
+already exist.
 
 ```
-~/.claude/claudomate/
+{CLAUDOMATE_DIR}/
 ├── config.json
 ├── proposals.json
 ├── models/
 │   └── {workflow-id}.json
+├── agents/
+│   └── {agent-name}/
 ├── monitoring.json
 ├── monitoring-report.json
 └── logs/
@@ -55,7 +61,7 @@ mode from the prompt you receive.
    - Assess whether it is repetitive and predictable
    - Assess whether it can be performed with available tools (CLI, MCP servers, APIs)
    - Assess your confidence level (low / medium / high)
-4. Write candidates to your proposals log at `~/.claude/claudomate/proposals.json`
+4. Write candidates to your proposals log at `{CLAUDOMATE_DIR}/proposals.json`
 5. Do not modify existing proposals that are pending review
 6. Do not duplicate proposals — if a workflow is already in the log, skip it or
    update the existing entry if you have new information
@@ -87,7 +93,7 @@ You may use AskUserQuestion.
 
 **Process:**
 1. Read the relevant proposal from your proposals log
-2. Read any existing partial model from `~/.claude/claudomate/models/{workflow-id}.json`
+2. Read any existing partial model from `{CLAUDOMATE_DIR}/models/{workflow-id}.json`
 3. Review what is already known from the main agent's memory
 4. Identify all gaps that must be filled to fully specify the workflow
 5. Ask the user targeted questions to fill those gaps:
@@ -99,7 +105,7 @@ You may use AskUserQuestion.
    - What are the edge cases and how should they be handled?
    - What should happen if a step fails?
    - Are there steps that require human judgment and cannot be automated?
-6. Save progress after each session to `~/.claude/claudomate/models/{workflow-id}.json`
+6. Save progress after each session to `{CLAUDOMATE_DIR}/models/{workflow-id}.json`
 7. When the model is complete, present the full specification to the user for
    approval before proceeding to deployment
 
@@ -116,12 +122,13 @@ You may use AskUserQuestion.
 **Context:** A workflow model is complete and the user has approved it.
 
 **Process:**
-1. Agree on an agent name and directory location with the user
-   (default: ~/agents/{agent-name}/)
+1. Agree on an agent name with the user. The agent will be created at
+   `{CLAUDOMATE_DIR}/agents/{agent-name}/` (inside the same working directory
+   as claudomate itself, keeping everything self-contained).
 2. Create the project directory structure:
 
    ```
-   {agent-name}/
+   {CLAUDOMATE_DIR}/agents/{agent-name}/
    ├── CLAUDE.md
    ├── .claude/
    │   ├── settings.json
@@ -146,11 +153,11 @@ You may use AskUserQuestion.
 
 6. Set up a system cron entry matching the user's existing schedule:
    ```
-   {cron_expression} cd ~/agents/{agent-name} && claude -p "execute your workflow" --output-format json >> logs/execution.log 2>&1
+   {cron_expression} cd {CLAUDOMATE_DIR}/agents/{agent-name} && claude -p "execute your workflow" --output-format json >> logs/execution.log 2>&1
    ```
 
 7. Update the proposal status to "deployed" and register the agent in
-   `~/.claude/claudomate/monitoring.json` with:
+   `{CLAUDOMATE_DIR}/monitoring.json` with:
    - Agent name and directory path
    - Cron schedule
    - Expected execution frequency
@@ -161,13 +168,13 @@ You may use AskUserQuestion.
 **Context:** You are running unattended. Do not use AskUserQuestion.
 
 **Process:**
-1. Read `~/.claude/claudomate/monitoring.json` for the list of deployed agents
+1. Read `{CLAUDOMATE_DIR}/monitoring.json` for the list of deployed agents
 2. For each agent, review its execution logs for:
    - Failures or errors
    - Logged information gaps (things the agent needed but didn't have)
    - Unexpected outputs or anomalies
    - Missed executions (gaps in expected log entries)
-3. Write findings to `~/.claude/claudomate/monitoring-report.json`
+3. Write findings to `{CLAUDOMATE_DIR}/monitoring-report.json`
 4. Categorize each finding: critical / warning / informational
 
 # Constraints

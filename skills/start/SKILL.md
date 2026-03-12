@@ -10,16 +10,20 @@ Activate or resume claudomate — session scanning on, all agents running.
 
 ## Steps
 
-### 1. Enable the session-start hook
+### 1. Determine scope and enable the session-start hook
 
-Read `~/.claude/claudomate/config.json` if it exists. Set `"enabled": true`.
-If the file doesn't exist, create it with:
+Determine where to create or update the config:
 
-```json
-{
-  "enabled": true
-}
-```
+1. Check `.claude/settings.json` in the current directory for an `enabledPlugins`
+   entry for `claudomate@sidmcfarland`. If present, the plugin is **project-installed**
+   and must use project scope — use `.claude/claudomate/` regardless of whether
+   a global config also exists.
+2. Otherwise the plugin is **globally installed** — use `~/.claude/claudomate/`.
+
+Create `config.json` in the resolved directory if it doesn't exist.
+
+This is `CLAUDOMATE_DIR` (the parent directory of the chosen config path). Create
+it if it doesn't exist, then set `"enabled": true` in `config.json`.
 
 If it already has `"enabled": true`, note that claudomate is already active
 and continue to step 2.
@@ -33,11 +37,11 @@ back with `crontab -`.
 
 Example — a suspended line like:
 ```
-# claudomate-suspended: 0 9 * * 1-5 cd ~/agents/invoice-processor && claude -p --dangerously-skip-permissions
+# claudomate-suspended: 0 9 * * 1-5 cd {CLAUDOMATE_DIR}/agents/invoice-processor && claude -p --dangerously-skip-permissions
 ```
 becomes:
 ```
-0 9 * * 1-5 cd ~/agents/invoice-processor && claude -p --dangerously-skip-permissions
+0 9 * * 1-5 cd {CLAUDOMATE_DIR}/agents/invoice-processor && claude -p --dangerously-skip-permissions
 ```
 
 If no suspended entries are found, skip this step silently.
@@ -46,6 +50,7 @@ If no suspended entries are found, skip this step silently.
 
 Tell the user:
 - Whether claudomate was already active or has just been enabled
+- Which mode is active: **project** (`.claude/claudomate/`) or **global** (`~/.claude/claudomate/`)
 - How many agent cron schedules were restored (list agent names if any)
 - That the session-start scan will now run automatically at the start of each new session
 - That `/claudomate:scan` can also be run manually at any time

@@ -17,10 +17,10 @@ Over time, claudomate builds a growing ecosystem of purpose-built agents that ha
 
 | Skill | Purpose |
 |---|---|
-| `/claudomate:start` | Add the session-start hook to CLAUDE.md (creates the file if needed) |
+| `/claudomate:start` | Enable session scanning and restore any suspended agent cron schedules |
 | `/claudomate:scan` | Check for pending proposals and agent health alerts |
 | `/claudomate:build` | Interactively model a workflow for automation |
-| `/claudomate:stop` | Pause claudomate: remove the session-start hook and suspend all agent cron schedules |
+| `/claudomate:stop` | Pause claudomate: disable session scanning and suspend all agent cron schedules |
 | `/claudomate:kill` | Remove a specific deployed agent (cron entry + directory + registry) |
 | `/claudomate:remove` | Full uninstall: stop + kill all agents + delete working files |
 
@@ -50,18 +50,18 @@ claude --plugin-dir ./claudomate
 
 ### Step 2: Run `/claudomate:start`
 
-This activates claudomate by adding a session-start hook to your CLAUDE.md. It
-will ask whether to activate for this project only or globally across all projects,
-then create or update the file automatically.
+This activates claudomate. The plugin's built-in `SessionStart` hook will
+automatically surface pending proposals and monitoring alerts at the start of
+each session. Running `/claudomate:start` also restores any previously suspended
+agent cron schedules.
 
 ## Uninstallation
 
 ### To fully uninstall
 
 Run `/claudomate:remove`. This will:
-- Remove the session-start hook from CLAUDE.md
 - Kill all deployed agents (cron entries + directories)
-- Delete all claudomate working files
+- Delete all claudomate working files (including config)
 
 Then uninstall the plugin itself:
 
@@ -76,9 +76,9 @@ and registry entry without affecting anything else.
 
 ### To pause without uninstalling
 
-Run `/claudomate:stop` to remove the session-start hook and suspend all agent
-cron schedules. All files and working data are preserved. Run `/claudomate:start`
-to fully resume — it restores the hook and re-enables all suspended cron jobs.
+Run `/claudomate:stop` to disable session scanning and suspend all agent cron
+schedules. All files and working data are preserved. Run `/claudomate:start`
+to fully resume — it re-enables scanning and restores all suspended cron jobs.
 
 ## Usage
 
@@ -94,7 +94,7 @@ It reads your agent's memory for patterns — things you do repeatedly, on a sch
 
 ### Reviewing proposals
 
-At the start of each session (if you ran `/claudomate:start`), your agent checks for pending proposals and summarizes them. You can also check manually:
+At the start of each session, the plugin's built-in hook automatically checks for pending proposals and monitoring alerts and injects a summary into context. You can also check manually:
 
 ```
 /claudomate:scan
@@ -134,10 +134,11 @@ Claudomate periodically reviews deployed agent logs for failures, information ga
 | Component | Purpose |
 |---|---|
 | `agents/claudomate.md` | The core subagent definition with all four operating modes |
-| `skills/start/` | Adds the session-start hook to CLAUDE.md and restores suspended cron schedules |
-| `skills/scan/` | Session-start skill that reads proposals and monitoring logs |
+| `hooks/hooks.json` | `SessionStart` hook that injects a scan summary at the start of every session |
+| `skills/start/` | Enables session scanning via config and restores suspended cron schedules |
+| `skills/scan/` | Reads proposals and monitoring logs and surfaces findings to the user |
 | `skills/build/` | Invokes the claudomate subagent for interactive workflow modeling |
-| `skills/stop/` | Removes the session-start hook and suspends all agent cron schedules |
+| `skills/stop/` | Disables session scanning via config and suspends all agent cron schedules |
 | `skills/kill/` | Removes a single deployed agent (cron entry + directory + registry) |
 | `skills/remove/` | Full uninstall: stop + kill all agents + delete working files |
 
@@ -147,6 +148,7 @@ Claudomate stores its working files at `~/.claude/claudomate/`:
 
 ```
 ~/.claude/claudomate/
+├── config.json               # Plugin settings (enabled, future options)
 ├── proposals.json            # Candidate workflows
 ├── models/                   # In-progress workflow models
 ├── monitoring.json           # Deployed agent registry

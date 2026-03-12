@@ -1,10 +1,9 @@
 ---
 name: remove
 description: >
-  Fully uninstalls claudomate. Removes the session-start hook from CLAUDE.md,
-  kills all deployed agents (cron entries + directories), and deletes all
-  claudomate working files. Ends with instructions for uninstalling the plugin
-  itself.
+  Fully uninstalls claudomate. Kills all deployed agents (cron entries +
+  directories) and deletes all claudomate working files including the config.
+  Ends with instructions for uninstalling the plugin itself.
 ---
 
 Fully uninstall claudomate from this machine.
@@ -18,7 +17,6 @@ what will be removed and ask for explicit confirmation:
 
 ```
 This will permanently remove:
-- The claudomate session-start hook from CLAUDE.md
 - All deployed agents (cron entries + project directories)
 - All claudomate working files (~/.claude/claudomate/)
 
@@ -28,16 +26,7 @@ Continue? (yes/no)
 
 If the user says no, stop immediately.
 
-### 2. Remove the session-start hook
-
-Check both `CLAUDE.md` in the current working directory and `~/.claude/CLAUDE.md`
-for the following line and remove it from any file where it appears:
-
-```
-At the start of each new session or conversation, run the `/claudomate:scan` skill.
-```
-
-### 3. Remove all deployed agents
+### 2. Remove all deployed agents
 
 Read `~/.claude/claudomate/monitoring.json` to get the list of deployed agents.
 For each agent:
@@ -52,15 +41,16 @@ b. Delete its project directory with `rm -rf {path}`. Verify the path is from
 
 If monitoring.json doesn't exist or has no agents, skip this step.
 
-### 4. Remove claudomate working files
+### 3. Remove claudomate working files
 
-Delete the entire claudomate working directory:
+Delete the entire claudomate working directory (this includes config.json,
+proposals, models, monitoring data, and logs):
 
 ```bash
 rm -rf ~/.claude/claudomate/
 ```
 
-### 5. Instruct the user to uninstall the plugin
+### 4. Instruct the user to uninstall the plugin
 
 Tell the user the automated cleanup is complete, then instruct them to run the
 following command to remove the plugin itself (this cannot be done from within
@@ -73,7 +63,7 @@ a skill):
 If the plugin was installed locally (via `--plugin-dir`), they should simply
 stop passing that flag when launching Claude Code.
 
-### 6. Final confirmation
+### 5. Final confirmation
 
-Summarize what was removed: hook location(s), number of agents killed, working
-files deleted. Remind the user to run the uninstall command above.
+Summarize what was removed: number of agents killed, working files deleted.
+Remind the user to run the uninstall command above.

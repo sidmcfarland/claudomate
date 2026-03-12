@@ -8,18 +8,21 @@ Claudomate is a Claude Code plugin (not a standalone app — no package.json, no
 
 ## Repository Structure
 
-This is a Claude Code plugin with three components:
-
 - **`agents/claudomate.md`** — The core subagent definition. Contains all four operating modes (observation, interrogation, deployment, monitoring) and is the primary file you'll edit for behavior changes. Uses `model: opus` and has access to `Read, Write, Edit, Bash, Glob, Grep, AskUserQuestion`.
-- **`skills/scan/SKILL.md`** — Session-start skill that reads proposals and monitoring logs. Invoked as `/claudomate:scan`.
-- **`skills/build/SKILL.md`** — Skill that invokes the claudomate subagent for interactive workflow modeling. Invoked as `/claudomate:build`.
-- **`.claude-plugin/plugin.json`** — Plugin manifest (name, version, metadata).
+- **`hooks/hooks.json`** — Defines the `SessionStart` hook that injects scan results into context at the start of every session.
+- **`skills/scan/SKILL.md`** — Reads proposals and monitoring logs and surfaces findings to the user. Invoked as `/claudomate:scan`.
+- **`skills/build/SKILL.md`** — Invokes the claudomate subagent for interactive workflow modeling. Invoked as `/claudomate:build`.
+- **`skills/start/SKILL.md`** — Enables session scanning and restores suspended cron schedules. Invoked as `/claudomate:start`.
+- **`skills/stop/SKILL.md`** — Disables session scanning and suspends all agent cron schedules. Invoked as `/claudomate:stop`.
+- **`skills/kill/SKILL.md`** — Removes a single deployed agent. Invoked as `/claudomate:kill`.
+- **`skills/remove/SKILL.md`** — Full uninstall. Invoked as `/claudomate:remove`.
+- **`.claude-plugin/plugin.json`** — Plugin manifest (name, version, metadata, hooks reference).
 
 ## Key Architecture Decisions
 
 - **Deployed agents are standalone Claude Code projects**, not subagents. Each gets its own directory (`~/agents/{name}/`), CLAUDE.md, skills, settings.json, and cron entry. Zero runtime dependency on the main agent.
 - **All working state lives in `~/.claude/claudomate/`** — proposals.json, models/, monitoring.json, monitoring-report.json, and logs/. This is the subagent's working directory, not part of this repo.
-- **The plugin requires a manual CLAUDE.md hook** — users must add a line to their CLAUDE.md to run `/claudomate:scan` at session start. Without this, proposals and alerts are never surfaced.
+- **Session-start scanning is handled by a `SessionStart` hook** defined in `hooks/hooks.json`. The hook checks `~/.claude/claudomate/config.json` for `enabled: false` before running, and exits silently when there is nothing to report. No manual CLAUDE.md setup is required.
 
 ## Development
 

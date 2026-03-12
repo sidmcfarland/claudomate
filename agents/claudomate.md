@@ -29,6 +29,7 @@ subdirectories if they do not already exist.
 
 ```
 ~/.claude/claudomate/
+├── config.json
 ├── proposals.json
 ├── models/
 │   └── {workflow-id}.json

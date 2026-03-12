@@ -1,10 +1,10 @@
 ---
 name: stop
 description: >
-  Pauses claudomate entirely. Removes the session-start hook from CLAUDE.md and
-  comments out the cron schedules for all claudomate-managed agents. Leaves all
-  files and working data intact so claudomate can be fully resumed with
-  /claudomate:start.
+  Pauses claudomate entirely. Disables the session-start hook via the claudomate
+  config file and comments out the cron schedules for all claudomate-managed
+  agents. Leaves all files and working data intact so claudomate can be fully
+  resumed with /claudomate:start.
 ---
 
 Pause claudomate entirely — no session scanning, no agents running in the
@@ -12,22 +12,19 @@ background.
 
 ## Steps
 
-### 1. Remove the session-start hook
+### 1. Disable the session-start hook
 
-Check both possible locations for the claudomate scan line:
-- `CLAUDE.md` in the current working directory (project scope)
-- `~/.claude/CLAUDE.md` (global scope)
+Read `~/.claude/claudomate/config.json` if it exists. Set `"enabled": false`.
+If the file doesn't exist, create it with:
 
-The line to look for is:
+```json
+{
+  "enabled": false
+}
 ```
-At the start of each new session or conversation, run the `/claudomate:scan` skill.
-```
 
-For each file where the line is found, remove it. If the line is the only content
-in the file, ask the user whether to delete the file or leave it empty. Do not
-modify anything else in the file.
-
-If the line is not found in either location, note this and continue — do not stop.
+If it already has `"enabled": false`, note that claudomate is already paused
+and continue to step 2.
 
 ### 2. Suspend deployed agent cron schedules
 
@@ -54,7 +51,7 @@ This preserves the full entry so it can be exactly restored by `/claudomate:star
 ### 3. Confirm
 
 Tell the user:
-- Whether the session-start hook was removed and from which file(s)
+- Whether claudomate was already paused or has just been disabled
 - How many agent cron entries were suspended (list agent names)
 - That all files, working data, and agent directories are intact
 - That `/claudomate:start` will fully resume claudomate and restore all cron schedules

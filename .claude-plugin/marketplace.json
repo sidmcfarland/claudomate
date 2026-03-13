@@ -12,7 +12,7 @@
         "source": "url",
         "url": "https://github.com/sidmcfarland/claudomate.git"
       },
-      "version": "1.2.0",
+      "version": "1.2.1",
       "keywords": ["automation", "workflows", "scheduling", "agents"],
       "author": {
         "name": "Sid McFarland"

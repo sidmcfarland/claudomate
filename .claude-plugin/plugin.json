@@ -1,7 +1,7 @@
 {
   "name": "claudomate",
   "description": "Automation discovery and deployment agent. Observes your workflows, proposes automation candidates, and deploys self-contained agents to execute them on schedule.",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "author": {
     "name": "Sid McFarland"
   },
